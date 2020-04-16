@@ -16,7 +16,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
 login.login_view = 'auth.login'
-login.login_message = _l('Please log in to access this page.')
+login.login_message = _l('Пожалуйста, войдите, чтобы получить доступ к этой странице.')
 mail = Mail()
 bootstrap = Bootstrap()
 moment = Moment()
@@ -70,7 +70,7 @@ def create_app(config_class=Config):
         else:
             if not os.path.exists('logs'):
                 os.mkdir('logs')
-            file_handler = RotatingFileHandler('logs/microblog.log',
+            file_handler = RotatingFileHandler('logs/PSYCHOMETRICA.log',
                                                maxBytes=10240, backupCount=10)
             file_handler.setFormatter(logging.Formatter(
                 '%(asctime)s %(levelname)s: %(message)s '
@@ -79,7 +79,7 @@ def create_app(config_class=Config):
             app.logger.addHandler(file_handler)
 
         app.logger.setLevel(logging.INFO)
-        app.logger.info('Microblog startup')
+        app.logger.info('PSYCHOMETRICA стартовала')
 
     return app
 

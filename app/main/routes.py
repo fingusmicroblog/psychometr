@@ -33,7 +33,7 @@ def index():
                     language=language)
         db.session.add(post)
         db.session.commit()
-        flash(_('Your post is now live!'))
+        flash(_('Вы опубликовали новую запись!'))
         return redirect(url_for('main.index'))
     page = request.args.get('page', 1, type=int)
     posts = current_user.followed_posts().paginate(
@@ -42,7 +42,7 @@ def index():
         if posts.has_next else None
     prev_url = url_for('main.index', page=posts.prev_num) \
         if posts.has_prev else None
-    return render_template('index.html', title=_('Home'), form=form,
+    return render_template('index.html', title=_('Домой'), form=form,
                            posts=posts.items, next_url=next_url,
                            prev_url=prev_url)
 
@@ -57,7 +57,7 @@ def explore():
         if posts.has_next else None
     prev_url = url_for('main.explore', page=posts.prev_num) \
         if posts.has_prev else None
-    return render_template('index.html', title=_('Explore'),
+    return render_template('index.html', title=_('Вопрос-ответ'),
                            posts=posts.items, next_url=next_url,
                            prev_url=prev_url)
 
@@ -85,12 +85,12 @@ def edit_profile():
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
         db.session.commit()
-        flash(_('Your changes have been saved.'))
+        flash(_('Ваши изменения были сохранены.'))
         return redirect(url_for('main.edit_profile'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.about_me.data = current_user.about_me
-    return render_template('edit_profile.html', title=_('Edit Profile'),
+    return render_template('edit_profile.html', title=_('Редактировать профиль'),
                            form=form)
 
 
@@ -99,14 +99,14 @@ def edit_profile():
 def follow(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
-        flash(_('User %(username)s not found.', username=username))
+        flash(_('Пользователь %(username)s не найден.', username=username))
         return redirect(url_for('main.index'))
     if user == current_user:
-        flash(_('You cannot follow yourself!'))
+        flash(_('Вы не можете быть подписаны на себя!'))
         return redirect(url_for('main.user', username=username))
     current_user.follow(user)
     db.session.commit()
-    flash(_('You are following %(username)s!', username=username))
+    flash(_('Вы подписаны на %(username)s!', username=username))
     return redirect(url_for('main.user', username=username))
 
 
@@ -115,14 +115,14 @@ def follow(username):
 def unfollow(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
-        flash(_('User %(username)s not found.', username=username))
+        flash(_('Пользователь %(username)s не найден.', username=username))
         return redirect(url_for('main.index'))
     if user == current_user:
-        flash(_('You cannot unfollow yourself!'))
+        flash(_('Вы не можете быть отписаны от себя!'))
         return redirect(url_for('main.user', username=username))
     current_user.unfollow(user)
     db.session.commit()
-    flash(_('You are not following %(username)s.', username=username))
+    flash(_('Вы не можете подписаться на  %(username)s.', username=username))
     return redirect(url_for('main.user', username=username))
 
 
@@ -146,5 +146,5 @@ def search():
         if total > page * current_app.config['POSTS_PER_PAGE'] else None
     prev_url = url_for('main.search', q=g.search_form.q.data, page=page - 1) \
         if page > 1 else None
-    return render_template('search.html', title=_('Search'), posts=posts,
+    return render_template('search.html', title=_('Поиск'), posts=posts,
                            next_url=next_url, prev_url=prev_url)
